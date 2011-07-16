@@ -64,7 +64,13 @@ function addBeerToStorage(beer, beerList) {
 
 function getBeerList() {
 	if (!localStorage["beer_list"]) {
-		return { list: {}, keys: [] };
+		return { list: {}, keys: [], drank_beers: 0, 
+				 advancement: {
+					 credits: [13, 75, 125, 175, 225, 275, 325, 425, 575, 750, 1000],
+					 names: ["Pledge", "$10", "Bachelors", "$20", "Masters", 
+							 "$30", "Ph.D", "$50", "Professor", "Dean", "Chancellor"]
+				 }
+		};
 	}
 	
 	return JSON.parse(localStorage["beer_list"]);
