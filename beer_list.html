@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>TMac Beer List</title>
+<script>
+function getBeerList() {
+	if (!localStorage["beer_list"]) {
+		return new Array();
+	}
+	
+	return JSON.parse(localStorage["beer_list"]);
+}
+
+function addCell(row, value) {
+	var cell = row.insertCell(-1);
+	
+	cell.innerText = value;
+}
+
+function onLoad() {
+	var list = getBeerList();
+	var table = document.getElementById("beer_table");
+	
+	for(var i = 0; i < list.length; i++) {
+		var row = table.insertRow(-1);
+		addCell(row, list[i].name);
+		addCell(row, list[i].container);
+		addCell(row, list[i].style);
+		addCell(row, list[i].alcohol);
+		addCell(row, list[i].description);
+		addCell(row, list[i].brewery);
+		addCell(row, list[i].origin);
+		addCell(row, list[i].picture);
+	}
+}
+
+</script>
+</head>
+
+<body onLoad="javascript:onLoad();">
+<table id="beer_table">
+<tr><th>Name</th><th>Container</th><th>Style</th><th>Alcohol</th><th>Description</th><th>Brewery</th><th>Origin</th><th>Picture</th></tr>
+</table>
+</body>
+</html>

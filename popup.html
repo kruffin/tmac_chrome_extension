@@ -1,0 +1,95 @@
+<style>
+body {
+	min-width: 200px;
+	overflow-x: hidden;
+}
+</style>
+
+<script>
+function Beer() {
+	this.id = 0;
+	this.name = "";
+	this.container = "";
+	this.style = "";
+	this.alcohol = "";
+	this.description = "";
+	this.brewery = "";
+	this.origin = "";
+	this.picture = "";
+}
+
+function findBeer(name, beerList) {
+	for (var i = 0; i < beerList.length; i++) {
+		var currentBeer = beerList[i];
+		if (currentBeer.name == name) {
+			return currentBeer;
+		}
+	}
+	
+	return null;	
+}
+
+function addBeerToStorage(beer, beerList) {
+	
+	// locate the current beer if it already exists
+	var existingBeer = findBeer(beer.name, beerList);
+	
+	if (!existingBeer) {
+		beerList.push(beer);
+	}
+}
+
+function getBeerList() {
+	// TODO: Use a better structure than a list; maybe a hashmap.
+	if (!localStorage["beer_list"]) {
+		return new Array();
+	}
+	
+	return JSON.parse(localStorage["beer_list"]);
+}
+
+function setBeerList(beerList) {
+	localStorage["beer_list"] = JSON.stringify(beerList);	
+}
+
+function pull_beers() {
+	console.log("logging...");
+	
+	chrome.tabs.executeScript(null, {file: 'beer_scraper.js'});
+}
+
+chrome.extension.onRequest.addListener(function(beers, sender, sendResponse) {
+	
+	var storedList = getBeerList();
+	var beerList = JSON.parse(beers);
+	
+	for (var i = 0; i < beerList.length; i++) {
+		addBeerToStorage(beerList[i], storedList);
+	}
+	
+	document.getElementById("total").innerText = storedList.length;
+	
+	setBeerList(storedList);
+	sendResponse({});
+});
+
+function set_total() {
+	document.getElementById("total").innerText = getBeerList().length;
+}
+
+function open_beer_tab() {
+	chrome.tabs.create({url: "beer_list.html"});	
+}
+</script>
+
+<html>
+<head>
+
+</head>
+
+<body onLoad="javascript:set_total();">
+<span id="total">loading...</span> in storage.<br/>
+<a onClick="javascript:open_beer_tab();" href="#">View TMac Beers</a><br/>
+<a id="pull_beers" onClick="javascript:pull_beers()" href="#">Pull TMac Beers</a>
+</body>
+</html>

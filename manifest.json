@@ -1,0 +1,15 @@
+{
+  "name": "Taco Mac Beer List",
+  "version": "1.0",
+  "description": "Obtains the current beer list from the taco mac website.",
+  "browser_action": {
+    "default_icon": "favicon.png",
+    "popup": "popup.html"
+  },
+  "permissions": [
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "contextMenus"
+  ]
+}
