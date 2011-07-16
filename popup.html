@@ -24,42 +24,47 @@ body {
 
 <script>
 function Beer() {
-	this.id = 0;
-	this.name = "";
-	this.container = "";
-	this.style = "";
-	this.alcohol = "";
-	this.description = "";
-	this.brewery = "";
-	this.origin = "";
-	this.picture = "";
+	this.name = "";        <!-- The name of the beer. -->
+	this.container = { bottle: false, draught: false };   <!-- If it's in bottle or draught. -->
+	this.style = "";       <!-- What type of beer (IPA, Dark, etc.) -->
+	this.alcohol = "";     <!-- How drunk you get ;) -->
+	this.description = ""; <!-- A description of the beer. -->
+	this.brewery = "";     <!-- The name of the brewery. -->
+	this.origin = "";      <!-- The place of origin. -->
+	this.picture = "";     <!-- A url to a picture of the beer; may remove. -->
 }
 
-function findBeer(name, beerList) {
-	for (var i = 0; i < beerList.length; i++) {
-		var currentBeer = beerList[i];
-		if (currentBeer.name == name) {
-			return currentBeer;
-		}
+function findBeer(beer, beerList) {
+	if (beerList[beer.name]) {
+		return JSON.parse(beerList[beer.name]);
 	}
-	
-	return null;	
+	return null;
 }
 
 function addBeerToStorage(beer, beerList) {
 	
-	// locate the current beer if it already exists
-	var existingBeer = findBeer(beer.name, beerList);
+	<!-- locate the current beer if it already exists. -->
+	var existingBeer = beerList.list[beer.name];
 	
 	if (!existingBeer) {
-		beerList.push(beer);
+		beerList.keys.push(beer.name);
+		beerList.list[beer.name] = beer;
+	} else if (existingBeer.container) {
+		<!-- Update the available containers if new. -->
+		if (beer.container.bottle) {
+			existingBeer.container.bottle = beer.container.bottle;
+		}
+		if (beer.container.draught) {
+			existingBeer.container.draught = beer.container.draught;
+		}
+		
+		beerList.list[existingBeer.name] = existingBeer;
 	}
 }
 
 function getBeerList() {
-	// TODO: Use a better structure than a list; maybe a hashmap.
 	if (!localStorage["beer_list"]) {
-		return new Array();
+		return { list: {}, keys: [] };
 	}
 	
 	return JSON.parse(localStorage["beer_list"]);
@@ -75,6 +80,7 @@ function pull_beers() {
 	chrome.tabs.executeScript(null, {file: 'beer_scraper.js'});
 }
 
+<!-- Add a listener for the scraper running in the page context. -->
 chrome.extension.onRequest.addListener(function(beers, sender, sendResponse) {
 	
 	var storedList = getBeerList();
@@ -84,16 +90,18 @@ chrome.extension.onRequest.addListener(function(beers, sender, sendResponse) {
 		addBeerToStorage(beerList[i], storedList);
 	}
 	
-	document.getElementById("total").innerText = storedList.length;
+	
 	
 	setBeerList(storedList);
+	set_total();
 	sendResponse({});
 });
 
 function set_total() {
-	document.getElementById("total").innerText = getBeerList().length;
+	document.getElementById("total").innerText = getBeerList().keys.length;
 }
 
+<!-- Shows a tab with useful beer information. -->
 function open_beer_tab() {
 	chrome.tabs.create({url: "beer_list.html"});	
 }

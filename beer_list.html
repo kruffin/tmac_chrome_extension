@@ -18,6 +18,11 @@ along with tmac_chrome_extension.  If not, see <http://www.gnu.org/licenses/>.
 <html>
 <head>
 <title>TMac Beer List</title>
+<style>
+#beer_table {
+	border: 1 solid;	
+}
+</style>
 <script>
 function getBeerList() {
 	if (!localStorage["beer_list"]) {
@@ -37,16 +42,17 @@ function onLoad() {
 	var list = getBeerList();
 	var table = document.getElementById("beer_table");
 	
-	for(var i = 0; i < list.length; i++) {
+	for(var i = 0; i < list.keys.length; i++) {
 		var row = table.insertRow(-1);
-		addCell(row, list[i].name);
-		addCell(row, list[i].container);
-		addCell(row, list[i].style);
-		addCell(row, list[i].alcohol);
-		addCell(row, list[i].description);
-		addCell(row, list[i].brewery);
-		addCell(row, list[i].origin);
-		addCell(row, list[i].picture);
+		var currentBeer = list.list[list.keys[i]];
+		addCell(row, currentBeer.name);
+		addCell(row, "B:" + currentBeer.container.bottle + "|D:" + currentBeer.container.draught);
+		addCell(row, currentBeer.style);
+		addCell(row, currentBeer.alcohol);
+		addCell(row, currentBeer.description);
+		addCell(row, currentBeer.brewery);
+		addCell(row, currentBeer.origin);
+		addCell(row, currentBeer.picture);
 	}
 }
 

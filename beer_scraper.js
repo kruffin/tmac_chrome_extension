@@ -1,4 +1,4 @@
-<!--
+/*
 This file is part of the tmac_chrome_extension.
 
 tmac_chrome_extension is free software: you can redistribute it and/or modify
@@ -13,10 +13,10 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with tmac_chrome_extension.  If not, see <http://www.gnu.org/licenses/>.
--->
+*/
 
 function findBeers() {
-	return [{name: "Random", container: "", style: "", alcohol: "", description: "", brewery: "", origin: "", picture: ""}];
+	return [{name: "Random", container: { bottle: true, draught: false }, style: "", alcohol: "", description: "", brewery: "", origin: "", picture: ""}];
 }
 
 console.log("Doing stuff.");
