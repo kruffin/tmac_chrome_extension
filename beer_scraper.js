@@ -65,9 +65,36 @@ along with tmac_chrome_extension.  If not, see <http://www.gnu.org/licenses/>.
     </body>
 */
 function findBeers() {
+	var beerList = [];
 	var beerDivs = document.getElementsByClassName('beer-info');
 	
-	return [{name: "Random", container: { bottle: true, draught: false }, style: "", alcohol: "", description: "", brewery: "", origin: "", picture: ""}];
+	for (var i = 0; i < beerDivs.length; i++) {
+		var header = beerDivs[i].getElementsByClassName('header');
+		var name = header[0].getElementsByClassName('name')[0].innerText;
+		
+		// update the container
+		var format = header[0].getElementsByClassName('format')[0].innerText.toLowerCase();
+		var container = { bottle: false, draught: false };
+		if (format == 'bottle') {
+			container.bottle = true;
+		} else if (format == 'draught') {
+			container.draught = true;
+		}
+		
+		var style = header[0].getElementsByClassName('style')[0].innerText;
+		var alcohol = header[0].getElementsByClassName('abv')[0].innerText;
+		
+		var body = beerDivs[i].getElementsByClassName('body');
+		var description = body[0].getElementsByClassName('description')[0].innerText.replace('Add To Fridge', '').replace('Add Again', '').replace('<br>', '');
+		
+		var data = beerDivs[i].getElementsByClassName('data');
+		var brewery = data[0].getElementsByClassName('brewery')[0].getElementsByClassName('value')[0].innerText;
+		var origin = data[0].getElementsByClassName('origin')[0].getElementsByClassName('value')[0].innerText;
+		
+		beerList.push({ name: name, container: container, style: style, alcohol: alcohol, description: description, brewery: brewery, origin: origin, picture: '' });
+	}
+	
+	return beerList;
 }
 
 console.log("Doing stuff.");
