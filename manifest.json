@@ -19,7 +19,7 @@ along with tmac_chrome_extension.  If not, see <http://www.gnu.org/licenses/>.
   "version": "1.0",
   "description": "Obtains the current beer list from the taco mac website.",
   "browser_action": {
-    "default_icon": "favicon.png",
+    "default_icon": "beer.png",
     "popup": "popup.html"
   },
   "permissions": [
