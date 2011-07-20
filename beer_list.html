@@ -46,7 +46,15 @@ function onLoad() {
 		var row = table.insertRow(-1);
 		var currentBeer = list.list[list.keys[i]];
 		addCell(row, currentBeer.name);
-		addCell(row, "B:" + currentBeer.container.bottle + "|D:" + currentBeer.container.draught);
+		var container = '';
+		if (currentBeer.container.bottle) {
+			container += '<img src="bottle.png" width="32px" alt="Bottle"/>';
+		}
+		if (currentBeer.container.draught) {
+			container += '<img src="beer.png" width="32px" alt="Draught Beer"/>';
+		}
+		var cell = row.insertCell(-1);
+		cell.innerHTML = container;
 		addCell(row, currentBeer.style);
 		addCell(row, currentBeer.alcohol);
 		addCell(row, currentBeer.description);
