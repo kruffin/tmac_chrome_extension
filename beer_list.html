@@ -24,7 +24,38 @@ along with tmac_chrome_extension.  If not, see <http://www.gnu.org/licenses/>.
 }
 </style>
 <script>
-function getBeerList() {
+function SortableTable(tableName) {
+	this.columnHash = {};
+	
+	this.sort_by = function(columnName) {
+		console.log("sorting by: " + columnName);
+	};
+	
+	var table = document.getElementById(tableName);
+	this.body = table.getElementsByTagName("tbody")[0];
+	this.columns = table.getElementsByTagName("thead")[0];
+	
+	// Insert keys for the hash table
+	var tableColumns = this.columns.getElementsByTagName("tr")[0].getElementsByTagName("th");
+	for (var i = 0; i < tableColumns.length; i++) {
+		this.columnHash[tableColumns[i].innerText] = i;
+		var currentColumn = tableColumns[i];
+		currentColumn.onmousedown = function(event) {
+			this.sort_by(event.target.innerText);
+		}.bind(this);
+	}
+	
+	// Put all of the rows in an array
+	this.rows = [];
+	var tableRows = this.body.getElementsByTagName("tr");
+	while (tableRows.length > 0) {
+		this.rows.push(tableRows[0]);
+		tableRows.shift();
+	}
+}
+
+
+function get_beer_list() {
 	if (!localStorage["beer_list"]) {
 		return new Array();
 	}
@@ -32,20 +63,20 @@ function getBeerList() {
 	return JSON.parse(localStorage["beer_list"]);
 }
 
-function addCell(row, value) {
+function add_cell(row, value) {
 	var cell = row.insertCell(-1);
 	
 	cell.innerText = value;
 }
 
-function onLoad() {
-	var list = getBeerList();
-	var table = document.getElementById("beer_table");
+function on_load() {
+	var list = get_beer_list();
+	var sortTable = new SortableTable("beer_table");
 	
 	for(var i = 0; i < list.keys.length; i++) {
-		var row = table.insertRow(-1);
+		var row = sortTable.body.insertRow(-1);
 		var currentBeer = list.list[list.keys[i]];
-		addCell(row, currentBeer.name);
+		add_cell(row, currentBeer.name);
 		var container = '';
 		if (currentBeer.container.bottle) {
 			container += '<img src="bottle.png" width="32px" alt="Bottle"/>';
@@ -55,21 +86,24 @@ function onLoad() {
 		}
 		var cell = row.insertCell(-1);
 		cell.innerHTML = container;
-		addCell(row, currentBeer.style);
-		addCell(row, currentBeer.alcohol);
-		addCell(row, currentBeer.description);
-		addCell(row, currentBeer.brewery);
-		addCell(row, currentBeer.origin);
-		addCell(row, currentBeer.picture);
+		add_cell(row, currentBeer.style);
+		add_cell(row, currentBeer.alcohol);
+		add_cell(row, currentBeer.description);
+		add_cell(row, currentBeer.brewery);
+		add_cell(row, currentBeer.origin);
+		add_cell(row, currentBeer.picture);
 	}
 }
 
 </script>
 </head>
 
-<body onLoad="javascript:onLoad();">
+<body onLoad="javascript:on_load();">
 <table id="beer_table">
+<thead>
 <tr><th>Name</th><th>Container</th><th>Style</th><th>Alcohol</th><th>Description</th><th>Brewery</th><th>Origin</th><th>Picture</th></tr>
+</thead>
+<tbody></tbody>
 </table>
 </body>
 </html>

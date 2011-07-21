@@ -91,7 +91,7 @@ function findBeers() {
 		var brewery = data[0].getElementsByClassName('brewery')[0].getElementsByClassName('value')[0].innerText;
 		var origin = data[0].getElementsByClassName('origin')[0].getElementsByClassName('value')[0].innerText;
 		
-		beerList.push({ name: name, container: container, style: style, alcohol: alcohol, description: description, brewery: brewery, origin: origin, picture: '' });
+		beerList.push({ name: name, container: container, style: style, alcohol: alcohol, description: description, brewery: brewery, origin: origin, price: '' });
 	}
 	
 	return beerList;

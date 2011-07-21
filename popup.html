@@ -20,6 +20,21 @@ body {
 	min-width: 200px;
 	overflow-x: hidden;
 }
+
+#progress_wrapper {
+	position: absolute;
+	min-width: 100%;
+}
+
+#progress {
+	background-color: rgb(0, 255, 0);
+	position: absolute;
+	display: inline-block
+}
+
+#goal {
+	position: absolute;	
+}
 </style>
 
 <script>
@@ -31,7 +46,7 @@ function Beer() {
 	this.description = ""; <!-- A description of the beer. -->
 	this.brewery = "";     <!-- The name of the brewery. -->
 	this.origin = "";      <!-- The place of origin. -->
-	this.picture = "";     <!-- A url to a picture of the beer; may remove. -->
+	this.price = "";     <!-- The price of the beer -->
 }
 
 function findBeer(beer, beerList) {
@@ -107,6 +122,26 @@ function set_total() {
 	document.getElementById("total").innerText = getBeerList().keys.length;
 }
 
+function get_goal() {
+	var beerList = getBeerList();
+	var currentTotal = beerList.drank_beers;
+	var foundIndex = -1;
+	for (var i = 0; i < beerList.advancement.credits.length; i++) {
+		if (currentTotal < beerList.advancement.credits[i]) {
+			return { goal_credits: beerList.advancement.credits[i], goal_title: beerList.advancement.names[i], current_credits: currentTotal };
+		}
+	}
+	
+	return { goal_credits: -1, goal_title: "Error", current_credits: currentTotal };
+}
+
+function set_percentage() {
+	var goal = get_goal();
+	var percent = goal.current_credits / goal.goal_credits;
+	document.getElementById("progress").innerText = percent + "%";
+	document.getElementById("progress").width = percent + "%";	
+}
+
 <!-- Shows a tab with useful beer information. -->
 function open_beer_tab() {
 	chrome.tabs.create({url: "beer_list.html"});	
@@ -118,7 +153,9 @@ function open_beer_tab() {
 
 </head>
 
-<body onLoad="javascript:set_total();">
+<body onLoad="javascript:set_total();set_percentage();">
+<div id="progress_wrapper"><div id="progress"></div></div><br/>
+<div>Goal: <span id="goal">Pledge</span></div>
 <span id="total">loading...</span> in storage.<br/>
 <a onClick="javascript:open_beer_tab();" href="#">View TMac Beers</a><br/>
 <a id="pull_beers" onClick="javascript:pull_beers()" href="#">Pull TMac Beers</a>
