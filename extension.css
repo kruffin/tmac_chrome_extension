@@ -1,0 +1,36 @@
+body {
+	min-width: 200px;
+	overflow-x: hidden;
+	background-color: rgb(253,255,181);
+}
+
+#progress_wrapper {
+	position: absolute;
+	width: 200px;
+	empty-cells: show;
+	border-style: none;
+	border-radius: 15px;
+	background-color: rgb(148,148,148);
+}
+
+#progress_bar {
+	background-color: rgb(148, 255, 148);
+	border-radius: 15px;
+	height: 12px;
+}
+
+#extra_progress {
+	background-color: rgb(255, 148, 148);
+	border-radius: 15px;
+	height: 12px;
+}
+
+#progress {
+}
+
+#goal {
+}
+
+#beer_table {
+	border: 1 solid;	
+}

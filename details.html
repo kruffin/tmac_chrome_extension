@@ -14,22 +14,30 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with tmac_chrome_extension.  If not, see <http://www.gnu.org/licenses/>.
 -->
-
 <html>
-<head>
+<head><title>Extension Details</title>
 <link rel="stylesheet" type="text/css" href="extension.css"/>
 
 <script type="text/javascript" src="beer_helper.js"></script>
-<script type="text/javascript" src="popup_script.js"></script>
-</head>
+<script type="text/javascript" src="details_script.js"></script>
 
-<body onLoad="javascript:set_total();set_percentage();">
-<table id="progress_wrapper"><tr><td id="progress_bar"></td><td id="extra_progress"></td></tr></table><br/>
-<table><tr><td><div id="progress"></div></td>
-<td><div>Goal: <span id="goal">Pledge</span></div></td>
-</tr></table>
-<span id="total">loading...</span> beers in storage.<br/>
-<a id="pull_beers" onClick="javascript:pull_beers()" href="#">Pull TMac Beers</a><br/>
-<a id="show_details" onClick="javascript:open_tab('details.html');" href="#">Show Details</a>
+</script>
+
+<body onLoad="javascript: addListeners();setup_table();">
+<div id="header">
+	<a onClick="javascript:open_tab('beer_list.html');" href="#">View TMac Beers</a><br/>
+	<a onClick="javascript:open_tab('beer_names.html');" href="#">View Names</a><br/>
+	<form method="post" enctype="multipart/form-data">
+		<input id="import_beers" type="file" name="my_beers"/>
+	</form>
+</div>
+<div id="list">
+	<table id="beer_table">
+	<thead>
+	<tr><th>Name</th><th>Container</th><th>Style</th><th>Alcohol</th><th>Description</th><th>Brewery</th><th>Origin</th><th>Picture</th></tr>
+	</thead>
+	<tbody></tbody>
+	</table>
+</div>
 </body>
 </html>

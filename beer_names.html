@@ -1,0 +1,51 @@
+<html>
+<head>
+<title>TMac Beer List</title>
+
+<script>
+function get_beer_list() {
+	if (!localStorage["beer_list"]) {
+		return new Array();
+	}
+	
+	return JSON.parse(localStorage["beer_list"]);
+}
+
+
+function on_load() {
+	var list = get_beer_list();
+	var tableBody = document.getElementById("table_body");
+	
+	for (var i = 0; i < list.keys.length; i++) {
+		var row = tableBody.insertRow(-1);
+		var cell = row.insertCell(-1);
+		cell.innerHTML = list.keys[i];
+		cell = row.insertCell(-1);
+		var beer = list.list[list.keys[i]];
+		var type = '';
+		if (beer.container.bottle) {
+			type = 'Bottle';
+		} else {
+			type = 'Draught';
+		}
+		cell.innerHTML = type;
+		
+		cell = row.insertCell(-1);
+		cell.innerHTML = beer.style;
+	}
+}
+</script>
+</head>
+
+<body onLoad="javascript:on_load()">
+
+<table id="table">
+	<thead>
+	<tr><th>Name</th><th>Type</th><th>Style</th></tr>
+	</thead>
+	<tbody id="table_body">
+	</tbody>
+</table>
+
+</body>
+</html>
